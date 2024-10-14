@@ -13,62 +13,57 @@ import { AddToCartChecker } from "./Checker/addToCartChecker";
 import { ChangePersonalInfoPage } from "./Pages/changePersonalInfo";
 import { ChangePersonalInfoChecker } from "./Checker/changePersonalInfoChecker";
 
-test.describe(
-  "TestCases para Magento",
-  {
-    tag: "@Logout",
-  },
-  () => {
-    test(
-      "Registro",
-      {
-        tag: "@Register",
-      },
-      async ({ page }) => {
-        // OK
-        const register = new RegisterPage(page);
-        const registerCheck = new RegisterCheck(page);
-        const navigate = new NavigatePage(page);
-        await navigate.home();
-        await register.createAccount();
-        await registerCheck.checkRegister();
-      }
-    );
-    test("Login", async ({ page }) => {
-      // OK
+test.describe("TestCases para Magento", () => {
+  test(
+    "Registro",
+    {
+      tag: ["@Register", "@Logout"],
+    },
+    async ({ page }) => {
+      const register = new RegisterPage(page);
+      const registerCheck = new RegisterCheck(page);
+      const navigate = new NavigatePage(page);
+      await navigate.home();
+      await register.createAccount();
+      await registerCheck.checkRegister();
+    }
+  );
+  test(
+    "Login",
+    {
+      tag: "@Logout",
+    },
+    async ({ page }) => {
       const login = new LoginPage(page);
       const loginCheck = new LoginCheck(page);
       const navigate = new NavigatePage(page);
       await navigate.home();
       await login.login();
       await loginCheck.checkLogin();
-    });
-    test(
-      "Agreguar a la Wishlist",
-      {
-        tag: "@Negative",
-      },
-      async ({ page }) => {
-        // OK
-        const addWish = new AddToWishPage(page);
-        const addWishCheck = new AddToWishCheck(page);
-        const navigate = new NavigatePage(page);
-        await navigate.home();
-        await addWish.addFromHomePage();
-        await addWishCheck.checkAddWish();
-      }
-    );
-  }
-);
-test.describe(
-  "TestCases para Magento",
-  {
-    tag: "@Login",
-  },
-  () => {
-    test("Buscar y agregar al carrito", async ({ page }) => {
-      //? Quitar ADs
-
+    }
+  );
+  test(
+    "Agreguar a la Wishlist",
+    {
+      tag: ["@Negative", "@Logout"],
+    },
+    async ({ page }) => {
+      const addWish = new AddToWishPage(page);
+      const addWishCheck = new AddToWishCheck(page);
+      const navigate = new NavigatePage(page);
+      await navigate.home();
+      await addWish.addFromHomePage();
+      await addWishCheck.checkAddWish();
+    }
+  );
+});
+test.describe("TestCases para Magento", () => {
+  test(
+    "Buscar y agregar al carrito",
+    {
+      tag: "@Login",
+    },
+    async ({ page }) => {
       const navigate = new NavigatePage(page);
       const addCart = new AddToCartPage(page);
       const addCartCheck = new AddToCartChecker(page);
@@ -84,10 +79,14 @@ test.describe(
       }
       await addCart.selectProduct(productos);
       await addCartCheck.checkAddCart();
-      await page.pause(); //! QUITAR !
-    });
-    test.only("Cambiar la informacion personal", async ({ page }) => {
-      //OK!
+    }
+  );
+  test(
+    "Cambiar la informacion personal",
+    {
+      tag: "@Login",
+    },
+    async ({ page }) => {
       const changeInfo = new ChangePersonalInfoPage(page);
       const changeInfoCheck = new ChangePersonalInfoChecker(page);
       const navigate = new NavigatePage(page);
@@ -97,15 +96,20 @@ test.describe(
       await changeInfoCheck.checkEmailInput();
       await changeInfo.saveChanges();
       await changeInfoCheck.checkInfoChange();
-    });
-    test("LogOut", async ({ page }) => {
-      //OK!
+    }
+  );
+  test(
+    "LogOut",
+    {
+      tag: "@Login",
+    },
+    async ({ page }) => {
       const logout = new LogoutPage(page);
       const logoutCheck = new LogoutCheck(page);
       const navigate = new NavigatePage(page);
       await navigate.home();
       await logout.logOut();
       await logoutCheck.checkLogout();
-    });
-  }
-);
+    }
+  );
+});

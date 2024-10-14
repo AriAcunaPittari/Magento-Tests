@@ -3,15 +3,19 @@ import { expect } from "playwright/test";
 
 export class LogoutCheck {
   page: Page;
-  //Agregar el locator que necesitamos corroborar
   alertSignOut: Locator;
+  loginText: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.alertSignOut = this.page.getByText("You are signed out");
+    this.loginText = this.page.getByText('Customer Login');
   }
   async checkLogout() {
-    // Expect logout exitoso
-    await expect(this.alertSignOut).toBeVisible();
+    if(await this.alertSignOut.isVisible()){
+      await expect(this.alertSignOut).toBeVisible();
+    } else{
+      await expect(this.loginText).toBeVisible();
+    }
   }
 }

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "noLoginTest": "npx playwright test --grep Logout --project=logout",
-    "LoginTest": "npx playwright test --grep Login --project=login",
-    "NegativeTest": "npx playwright test --grep Negative --project=logout",
-    "RegisterTest": "npx playwright test --grep Register --project=logout"
+    "noLoginTest": "npx playwright test --grep @Logout --project=logout",
+    "LoginTest": "npx playwright test --grep @Login --project=login",
+    "NegativeTest": "npx playwright test --grep @Negative --project=logout",
+    "RegisterTest": "npx playwright test --grep @Register --project=logout"
   },
   "keywords": [],
   "author": "",

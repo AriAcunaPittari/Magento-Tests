@@ -34,6 +34,7 @@ export class ChangePersonalInfoPage {
     this.infoNeeded = new InfoNeeded(this.page);
   }
   async goToPeronalInfo() {
+    await this.page.waitForLoadState("networkidle");
     await this.accOptions.click();
     await this.myAccountBtn.click();
   }

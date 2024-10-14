@@ -1,6 +1,7 @@
 // se busca el producto, se selecciona el color y talle y se agrega al carrito
 
 import { Locator, Page } from "playwright-core";
+import { InfoNeeded } from "./infoNeeded";
 
 export class AddToCartPage {
   page: Page;
@@ -12,6 +13,7 @@ export class AddToCartPage {
   selectSizeTop: Locator;
   selectColor: Locator;
   alertCartAdded: Locator;
+  infoNeeded: InfoNeeded;
   constructor(page: Page) {
     this.page = page;
     this.selectCategory = this.page.getByRole("link", {
@@ -24,6 +26,7 @@ export class AddToCartPage {
     this.selectSizeTop = this.page.getByLabel("XL");
     this.selectColor = this.page.getByLabel("Purple");
     this.alertCartAdded = this.page.getByRole("alert").locator("div").first();
+    this.infoNeeded = new InfoNeeded(this.page);
   }
   async searchProduct() {
     await this.selectCategory.click();
@@ -31,19 +34,20 @@ export class AddToCartPage {
   async selectProduct(productos: string[]) {
     await this.page.waitForLoadState("networkidle");
     let foundProducts = 0;
-    await this.page.pause(); //! QUITAR !
     for (let i = 0; i < (await this.row.count()); i++) {
-      const productItem = await this.row
+      const productItem = this.row
         .locator("div[class='product details product-item-details']")
         .nth(i)
         .locator("strong")
         .locator("a");
       const product = await productItem.innerText();
-      if (await productos.includes(product)) {
+      if (productos.includes(product)) {
+        await productItem.scrollIntoViewIfNeeded();
         await productItem.click();
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState("networkidle");
         if (await this.selectSizePants.isVisible()) {
           await this.selectSizePants.waitFor({ state: "visible" });
+          await this.selectSizePants.scrollIntoViewIfNeeded();
           await this.selectSizePants.click();
           await this.selectColor.click();
           await this.addBtn.click();
@@ -51,14 +55,15 @@ export class AddToCartPage {
           await this.page.goBack();
         } else if (await this.selectSizeTop.isVisible()) {
           await this.selectSizeTop.waitFor({ state: "visible" });
+          await this.selectSizeTop.scrollIntoViewIfNeeded();
           await this.selectSizeTop.click();
           await this.selectColor.click();
           await this.addBtn.click();
           await this.alertCartAdded.waitFor({ state: "visible" });
           await this.page.goBack();
         }
-        await foundProducts++;
-        if (await foundProducts === productos.length) {
+        foundProducts++;
+        if (foundProducts === productos.length) {
           break;
         }
       }
