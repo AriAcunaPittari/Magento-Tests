@@ -9,6 +9,7 @@ export class AddToCartChecker{
     }
     async checkColorChange(){
         // Expect que la imagen se haya cambiado al color indicado.
+        
     }
     async checkAddCart(){
         // Expect que se haya agregado exitosamente al carrito

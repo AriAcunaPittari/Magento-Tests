@@ -1,13 +1,17 @@
+import { Locator, Page } from "playwright-core";
+import { expect } from "playwright/test";
 
-import { Page } from "playwright-core";
+export class LogoutCheck {
+  page: Page;
+  //Agregar el locator que necesitamos corroborar
+  alertSignOut: Locator;
 
-export class LogoutCheck{
-    page: Page
-    //Agregar el locator que necesitamos corroborar
-    constructor(page:Page){
-        this.page = page;
-    }
-    async checkLogout(){
-        // Expect logout exitoso
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.alertSignOut = this.page.getByText("You are signed out");
+  }
+  async checkLogout() {
+    // Expect logout exitoso
+    await expect(this.alertSignOut).toBeVisible();
+  }
 }

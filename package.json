@@ -2,7 +2,12 @@
   "name": "magento-tests",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "noLoginTest": "npx playwright test --grep Logout --project=logout",
+    "LoginTest": "npx playwright test --grep Login --project=login",
+    "NegativeTest": "npx playwright test --grep Negative --project=logout",
+    "RegisterTest": "npx playwright test --grep Register --project=logout"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -14,6 +19,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "@cliqz/adblocker-playwright": "^1.33.2",
     "dotenv": "^16.4.5",
     "playwright": "^1.48.0",
     "playwright-core": "^1.48.0",
